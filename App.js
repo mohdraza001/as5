@@ -4,20 +4,23 @@ const cookieParser = require('cookie-parser');// it is used for temp data storag
 const mongoose = require('mongoose');//mongoose is create for to connect to database 
 const seceret = "assd123^&*^&*ghghggh";//it is a secret key for session
 const oneDay = 1000 * 60 * 60 * 24; // it is a time  duration for session 
-const sessions = require('express-session');// it is used for session 
+//const sessions = require('express-session');// it is used for session 
+const sessions = require('cookie-session');
+
 const PORT = 9999;//it is port number 
 const bcrypt = require('bcrypt');//it is used for encryption
 const hbs = require('nodemailer-express-handlebars');//it is used for mail with handlebars
 const saltRounds = 10;//for encryption
 const app = express();
 //const { body, validationResult } = require('express-validator');
-const { check ,validationResult} = require('express-validator');
+const { check ,validationResult, cookie} = require('express-validator');
 const path = require('path')//it is required the path of the folder
 app.use('/static', express.static(path.join(__dirname, 'public')))
 const crypto=require('crypto');//it used for create token
 //const bodyparser = require('body-parser')
 //var csrf=require('csurf');
 mongoose.set('strictQuery', true);
+
 
 //database connection
 mongoose.connect("mongodb+srv://razamohd:12QAZwsx@cluster0.gizdcu8.mongodb.net/test")
@@ -28,8 +31,8 @@ mongoose.connect("mongodb+srv://razamohd:12QAZwsx@cluster0.gizdcu8.mongodb.net/t
 app.use(sessions({
     secret: seceret,
     saveUninitialized: true,
-    cookie: { maxAge: oneDay },
-    resave: false
+    cookie: { secure: true,maxAge: oneDay },
+    resave: false,
 }))
 app.use(express.json());//it is middleware for json 
 app.use(express.urlencoded({ extended: false }));
@@ -37,6 +40,7 @@ app.engine('handlebars', exphbs.engine())
 app.set('view engine', 'handlebars');//set view engine for handlebars
 app.set('views', './views');//set the folder where habdlebars file available
 app.use(cookieParser());//it is middleware for json
+app.set('trust proxy', 1);
 const userModel = require('./model/User');//it is schema for database (usermodel detail)
 const tokenModel=require('./model/tokenModel');//it is schema for database (tokenmodel detail)
 const nodemailer = require("nodemailer");// it is used for mail
