@@ -1,4 +1,5 @@
 const express = require('express');//it is used  for fetch express module and function
+const env=require('dotenv').config();
 const exphbs = require('express-handlebars');//used for ui design
 const cookieParser = require('cookie-parser');// it is used for temp data storage for client side
 const mongoose = require('mongoose');//mongoose is create for to connect to database 
@@ -7,7 +8,7 @@ const oneDay = 1000 * 60 * 60 * 24; // it is a time  duration for session
 //const sessions = require('express-session');// it is used for session 
 const sessions = require('cookie-session');
 
-const PORT = 9999;//it is port number 
+const PORT = process.env.PORT;//it is port number 
 const bcrypt = require('bcrypt');//it is used for encryption
 const hbs = require('nodemailer-express-handlebars');//it is used for mail with handlebars
 const saltRounds = 10;//for encryption
